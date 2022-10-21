@@ -17,24 +17,15 @@ sp = spotipy.Spotify(auth_manager=SpotifyOAuth(client_id = cred.client_id, clien
     scope=scope))
 
 # find album by name
-# get the first album uri
+# get external urls
 
 album_names = album_data['Album']
 uri_list = []
 #need to skip rows that don't have needed values - how?
 for album_name in album_names:
     results = sp.search(q = "album:" + album_name, type = "album")
-    album_uri = results['albums']['items'][0]['uri']
-    uri_list.append(album_uri)
-
-
-#look up album by uri and find all the tracks
-for uri in uri_list:
-    album_tracks_result = sp.album_tracks(uri)
-    album_tracks = album_tracks_result['items'] 
-    track_list = []
-
-    #how to put them in song dataset?
-    #my plan: one dataframe for each song. first column is a series of all the songs. next column: spectrogram
-    for album_track in album_tracks:
-        track_list.append(album_track['name'])
+    try:
+        album_url = results['albums']['items'][0]['external_urls']['spotify']
+    except: 
+        print("link doesn't exist")
+    print (album_url)
