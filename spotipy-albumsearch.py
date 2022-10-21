@@ -20,7 +20,7 @@ sp = spotipy.Spotify(auth_manager=SpotifyOAuth(client_id = cred.client_id, clien
 # get external urls
 
 album_names = album_data['Album']
-uri_list = []
+url_list = []
 #need to skip rows that don't have needed values - how?
 for album_name in album_names:
     results = sp.search(q = "album:" + album_name, type = "album")
@@ -28,4 +28,4 @@ for album_name in album_names:
         album_url = results['albums']['items'][0]['external_urls']['spotify']
     except: 
         print("link doesn't exist")
-    print (album_url)
+    url_list.append(album_url)
