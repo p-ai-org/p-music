@@ -23,7 +23,7 @@ sp = spotipy.Spotify(auth_manager=SpotifyOAuth(client_id = cred.client_id, clien
 album_names = album_data['Album']
 album_dict = {}
 #need to skip rows that don't have needed values - how?
-for album_name in album_names[:100]:
+for album_name in album_names[:700]:
     results = sp.search(q = "album:" + album_name, type = "album")
     try:
         album_uri = results['albums']['items'][0]['uri']
