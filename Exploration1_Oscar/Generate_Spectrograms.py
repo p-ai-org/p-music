@@ -17,7 +17,7 @@ import tensorflow as tf
 import tensorflow_io as tfio
 
 # prepare and load data-----
-# assume we have already downloaded our mp3 files. we may need to convert into wav.
+# assume we have already downloaded our mp3 files. we need to convert into wav.
 def convert_mp3_wav(path_name):
     for subpath in os.listdir(path_name):
         if ".mp3" in subpath:
