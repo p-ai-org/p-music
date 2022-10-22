@@ -1,7 +1,6 @@
 # python file to download songs given song name and output directory
 # @oscars47
-# for spotipy need to go to developer.spotify.com, create app, get client ID and secret ID; then type "export CLIENT_ID = " in terminal to set an environment variable
-
+# for spotipy need to go to developer.spotify.com
 import os
 
 from spotipykeys import keys
