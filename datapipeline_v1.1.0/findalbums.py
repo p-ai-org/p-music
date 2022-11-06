@@ -48,8 +48,6 @@ def get_tracks(albums):
             album_dict[album_name] = track_list
         except:
             print('album %s could not be found' %album_name)
-            #c=0
-                
             
 
     return album_dict
