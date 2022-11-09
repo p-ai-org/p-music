@@ -6,15 +6,16 @@ import pandas as pd
 import spotipy, time
 from tqdm import tqdm
 from spotipy.oauth2 import SpotifyOAuth
-from spotipykeys import keys
+import cred
+import os
+
+client_id = os.environ.get("CLIENT_ID")
+client_secret = os.environ.get("CLIENT_SECRET")
+redirect_uri = os.environ.get("REDIRECT_URI")
 
 scope = 'user-library-read playlist-modify-public'
 
-SPOTIPY_CLIENT_ID=keys['spotipy_client_id']
-SPOTIPY_CLIENT_SECRET=keys['spotipy_client_secret']
-SPOTIPY_REDIRECT_URI=keys['spotipy_redirect_uri']
-
-sp= spotipy.Spotify(auth_manager=SpotifyOAuth(client_id=SPOTIPY_CLIENT_ID, client_secret=SPOTIPY_CLIENT_SECRET, redirect_uri=SPOTIPY_REDIRECT_URI, scope=scope))
+sp= spotipy.Spotify(auth_manager=SpotifyOAuth(client_id=client_id, client_secret=client_secret, redirect_uri=redirect_uri, scope=scope))
 
 # find album by name
 # get the first album uri

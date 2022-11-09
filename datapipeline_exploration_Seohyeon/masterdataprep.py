@@ -6,6 +6,8 @@
 
 # 2. For each song within each album directory
 #   a. Call downloadsongs 
+
+
 #   b. Call generatespectrograms
 
 # 3. Build dataset with tf.keras.utils.image_dataset_from_directory -- later
@@ -19,22 +21,25 @@ from os import path
 # NOTE: YOU WILL NEED TO DEFINE THE PATH TO YOUR CSV AND CHANGE THE SONG/SPEC PATHS IN ORDER FOR THIS TO WORK!
 
 # 1. load csv ----------------------
-data = pd.read_csv('merged_features.csv')
+folder = r"/Users/slae2020/Downloads/p-music-main/datapipeline_exploration_Seohyeon"
+p = folder+r'/merged_features.csv'
+data = pd.read_csv(p)
 # extract column with names
 
 album_list = data['Album'].to_list()
 
 # set song, spectrogram outputs
-song_dest = '/Volumes/PHLUID/p-ai/songs'
-spec_dest = '/Volumes/PHLUID/p-ai/spectrograms'
+mode = "0o666"
+song_dest = '/songs'
+spec_dest = '/spectrograms'
 
 # make directories
 if not(path.exists(song_dest)):
     print('making song dir!')
-    os.makedirs(path.join(song_dest))
+    os.path.join(song_dest, mode)
 if not(path.exists(spec_dest)):
     print('making spec dir!')
-    os.makedirs(path.join(spec_dest))
+    os.path.join(spec_dest, mode)
 
 # call our other files
 from downloadsongs import *
@@ -56,7 +61,7 @@ def get_data(albums):
         album_dir = path.join(song_dest, album_name)
         # see if it exists or not -- this gives error
         if not(path.isdir(album_dir)):
-            os.makedirs(album_dir)
+            os.mkdir(album_dir)
         # now access each song in the album dict
         try:
             songs = as_dict[album_name]
