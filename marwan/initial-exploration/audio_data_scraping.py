@@ -21,10 +21,15 @@ Now let's experiment with some spotify stuff!!
 '''
 import spotipy
 from spotipy.oauth2 import SpotifyOAuth
+from spotipykeys import keys
 
 scope = "user-library-read"
 
-sp = spotipy.Spotify(auth_manager=SpotifyOAuth(scope=scope))
+sp = spotipy.Spotify(auth_manager=SpotifyOAuth(
+    scope=scope, client_id=keys['spotipy_client_id'],
+    client_secret=keys['spotipy_client_secret'],
+    redirect_uri=keys['spotipy_redirect_uri']
+    ))
 #Let's create a dictionary of artist ID"s we want to search
 artist_id_dict = {}
 
