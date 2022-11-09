@@ -19,6 +19,7 @@ from spotipykeys import keys
 import spotipy
 from spotipy.oauth2 import SpotifyOAuth
 
+
 # NOTE: YOU WILL NEED TO DEFINE THE PATH TO YOUR CSV AND CHANGE THE SONG/SPEC PATHS IN ORDER FOR THIS TO WORK!
 
 scope = 'user-library-read playlist-modify-public'
@@ -39,8 +40,8 @@ data = pd.read_csv('merged_features.csv')
 album_list = data['Album'].to_list()
 
 # set song, spectrogram outputs
-song_dest = '/Volumes/PHLUID/p-ai/songs'
-spec_dest = '/Volumes/PHLUID/p-ai/spectrograms'
+song_dest = 'C:\p-ai\songs'
+spec_dest = 'C:\p-ai\spectrograms'
 
 # make directories
 if not(path.exists(song_dest)):
@@ -66,11 +67,15 @@ def get_data(albums):
 
     for i in tqdm (range(len(albums)), desc='chunk progress...', position=0, leave=True): #can't use enumerate for alive_bar
         album_name = albums[i]
-        
-        album_dir = path.join(song_dest, album_name)
+
+        #we need to clean the album_name when we create the folders..
+        # clean_album_name = album_name.replace(" ", "_")
+        # clean_album_name = "".join(e for e in clean_album_name if (e.isalnum() or e == "_"))
+
+        album_dir = song_dest + "/" + album_name
         # see if it exists or not -- this gives error
         if not(path.isdir(album_dir)):
-            os.mkdir(album_dir)
+            os.makedirs(album_dir)
         # now access each song in the album dict
         try:
             songs = as_dict[album_name]
