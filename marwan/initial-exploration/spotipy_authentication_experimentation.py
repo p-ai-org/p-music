@@ -20,16 +20,13 @@ Now let's experiment with some spotify stuff!!
 
 '''
 import spotipy
-from spotipy.oauth2 import SpotifyOAuth
+from spotipy.oauth2 import SpotifyOAuth, SpotifyClientCredentials
 from spotipykeys import keys
 
 scope = "user-library-read playlist-modify-public"
 
-sp = spotipy.Spotify(auth_manager=SpotifyOAuth(
-    scope=scope, client_id=keys['spotipy_client_id'],
-    client_secret=keys['spotipy_client_secret'],
-    redirect_uri=keys['spotipy_redirect_uri']
-    ))
+auth_manager = SpotifyClientCredentials()
+sp = spotipy.Spotipy(auth_manager)
 #Let's create a dictionary of artist ID"s we want to search
 artist_id_dict = {}
 

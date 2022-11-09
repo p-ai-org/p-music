@@ -15,8 +15,22 @@ import pandas as pd
 import os
 from tqdm import tqdm
 from os import path
+from spotipykeys import keys
+import spotipy
+from spotipy.oauth2 import SpotifyOAuth
 
 # NOTE: YOU WILL NEED TO DEFINE THE PATH TO YOUR CSV AND CHANGE THE SONG/SPEC PATHS IN ORDER FOR THIS TO WORK!
+
+scope = 'user-library-read playlist-modify-public'
+
+SPOTIPY_CLIENT_ID=keys['spotipy_client_id']
+SPOTIPY_CLIENT_SECRET=keys['spotipy_client_secret']
+SPOTIPY_REDIRECT_URI=keys['spotipy_redirect_uri']
+
+sp= spotipy.Spotify(auth_manager=SpotifyOAuth(
+    client_id=SPOTIPY_CLIENT_ID, client_secret=SPOTIPY_CLIENT_SECRET, 
+    redirect_uri=SPOTIPY_REDIRECT_URI, scope=scope)
+    )
 
 # 1. load csv ----------------------
 data = pd.read_csv('merged_features.csv')
@@ -37,8 +51,8 @@ if not(path.exists(spec_dest)):
     os.makedirs(path.join(spec_dest))
 
 # call our other files
-from downloadsongs import *
-from findalbums import *
+from downloadsongs_MARWAN_VERS import *
+from findalbums_MARWAN_VERS import *
 from generatespectrograms import *
 
 # function to call for each chunk of album data
