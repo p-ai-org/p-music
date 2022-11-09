@@ -74,7 +74,7 @@ def get_data(album_list):
 # break up album list into 4 chunks
 list_al = []
 i_step = int(len(album_list[_N:]) / 4)
-for i in range(2,4):
+for i in range(4):
     al = album_list[i + _N:(i+1)*i_step +_N]
     list_al.append(al)
 
