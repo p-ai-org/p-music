@@ -75,6 +75,7 @@ def get_data(albums):
         album_dir = song_dest + "/" + album_name
         # see if it exists or not -- this gives error
         if not(path.isdir(album_dir)):
+            #This is where the problem is occuring!
             os.makedirs(album_dir)
         # now access each song in the album dict
         try:
