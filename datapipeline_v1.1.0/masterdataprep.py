@@ -17,16 +17,16 @@ from tqdm import tqdm
 from os import path
 
 # NOTE: YOU WILL NEED TO DEFINE THE PATH TO YOUR CSV AND CHANGE THE SONG/SPEC PATHS IN ORDER FOR THIS TO WORK!
+DATA_DIR = '/home/oscar47/Desktop/P-ai/p-music'
 
 # 1. load csv ----------------------
-data = pd.read_csv('merged_features.csv')
+data = pd.read_csv(os.path.join(DATA_DIR, 'merged_features.csv'))
 # extract column with names
-
 album_list = data['Album'].to_list()
 
 # set song, spectrogram outputs
-song_dest = '/Volumes/PHLUID/p-ai/songs'
-spec_dest = '/Volumes/PHLUID/p-ai/spectrograms'
+song_dest = '/home/oscar47/Desktop/P-ai/songs'
+spec_dest = '/home/oscar47/Desktop/P-ai/spectrograms'
 
 # make directories
 if not(path.exists(song_dest)):
@@ -94,18 +94,7 @@ for i in range(chunk_num):
     chunk_data = chunk_data.append({'chunk': i, 'start index': start_index, 'end index': end_index, 'num songs': len(al)}, ignore_index=True)
     list_al.append(al)
 
-#get_data(list_al[3])
-
-# # now call each of the al on get_data
-# # for i, al in enumerate(list_al):
-# #     print('-----------')
-# #     print('running chunk %i' %i)
-# #     get_data(al)
-
-# # # can call on each chunk individually
-# # get_data(list_al[0])
-
-# # get user input
+# get user input
 print('chunk data:')
 print(chunk_data)
 #print(len(album_list))
