@@ -8,11 +8,8 @@ from tqdm import tqdm
 from spotipy.oauth2 import SpotifyOAuth, SpotifyClientCredentials
 from spotipykeys import keys
 
-scope = 'user-library-read playlist-modify-public'
-
 SPOTIPY_CLIENT_ID=keys['spotipy_client_id']
 SPOTIPY_CLIENT_SECRET=keys['spotipy_client_secret']
-SPOTIPY_REDIRECT_URI=keys['spotipy_redirect_uri']
 
 #sp= spotipy.Spotify(auth_manager=SpotifyOAuth(client_id=SPOTIPY_CLIENT_ID, client_secret=SPOTIPY_CLIENT_SECRET, redirect_uri=SPOTIPY_REDIRECT_URI))
 auth_manager = SpotifyClientCredentials(SPOTIPY_CLIENT_ID, SPOTIPY_CLIENT_SECRET)
