@@ -4,7 +4,7 @@
 
 import os
 
-from spotipykeys import keys
+from spotdlkeys import keys
 
 import spotdl
 from spotdl import Spotdl
@@ -17,11 +17,11 @@ def download_song(song_name, song_dir, sp):
     # call search method
 
     #create the spotdl object we're using without the need for constant reauthentication.
-    # SPOTIPY_CLIENT_ID=keys['spotipy_client_id']
-    # SPOTIPY_CLIENT_SECRET=keys['spotipy_client_secret']
-    # SPOTIPY_REDIRECT_URI=keys['spotipy_redirect_uri']
+    SPOTIPY_CLIENT_ID=keys['spotipy_client_id']
+    SPOTIPY_CLIENT_SECRET=keys['spotipy_client_secret']
+    SPOTIPY_REDIRECT_URI=keys['spotipy_redirect_uri']
 
-    spotdl = Spotdl(sp)
+    spotdl = Spotdl(client_id=SPOTIPY_CLIENT_ID, client_secret=SPOTIPY_CLIENT_SECRET, user_auth=False)
 
     try:
         song = spotdl.search([song_name])

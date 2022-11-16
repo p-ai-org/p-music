@@ -21,7 +21,7 @@ Now let's experiment with some spotify stuff!!
 '''
 import spotipy
 from spotipy.oauth2 import SpotifyOAuth
-from spotipykeys import keys
+from spotdlkeys import keys
 
 scope = "user-library-read playlist-modify-public"
 
