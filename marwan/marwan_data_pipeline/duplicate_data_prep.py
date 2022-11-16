@@ -126,8 +126,33 @@ def make_album_directories(as_dict, song_dest, spec_dest, sp):
     
 def download_songs(as_dict, song_dest, spec_dest, sp):
     '''
-    This function 
+    This function takes an as_dict and downloads the songs into the corresponding folder.
     '''
+
+    #first let's make sure we're in the song_directory
+    os.chdir(song_dest)
+    #next we will iterate through the album_names in our dict
+    for i in tqdm(range(len(as_dict.keys())), desc = "downloading songs progress...", position=0, leave=True):
+        album_name = list(as_dict.keys())[i]
+        #we must first clean the album name...
+        clean_album_name = album_name.replace(" ", "_")
+        clean_album_name = "".join(e for e in clean_album_name if (e.isalnum() or e == "_"))
+        
+        #If we find a dir with the "clean album name" we will change into that directory and download all the songs
+        album_dir = song_dest + '/' + clean_album_name
+        dir_exists = os.path.isdir(album_dir)
+        if (dir_exists):
+            os.chdir(album_dir)
+            song_list = as_dict[album_name]
+            #now we loop through the song_lists and download the songs
+            for i in tqdm(range(len(song_list)), desc= "downloading " + album_name + " songs...", position=0, leave=True):
+                download_song(song_list[i], song_dest, sp)
+        else:
+            print("album not found :(")
+
+
+            
+            
 
 def main(album_list, song_dest, spec_dest, sp):
     '''
@@ -146,7 +171,8 @@ def main(album_list, song_dest, spec_dest, sp):
         make_album_directories(as_dict, song_dest, spec_dest, sp)
 
     #now that we've made all the directories we must download each of the songs into the corresponding songs folder
-
+    for as_dict in chunk_album_dicts:
+        download_songs(as_dict, song_dest, spec_dest, sp)
 
     return chunk_album_dicts
 
