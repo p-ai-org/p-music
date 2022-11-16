@@ -11,7 +11,6 @@ from spotdl import Spotdl
 
 SPOTIPY_CLIENT_ID=keys['spotipy_client_id']
 SPOTIPY_CLIENT_SECRET=keys['spotipy_client_secret']
-SPOTIPY_REDIRECT_URI=keys['spotipy_redirect_uri']
 
 spotdl = Spotdl(client_id=SPOTIPY_CLIENT_ID, client_secret=SPOTIPY_CLIENT_SECRET)
 
