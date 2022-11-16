@@ -4,7 +4,7 @@
 
 import os
 
-from spotipykeys import keys
+from spotdlkeys import keys
 
 import spotdl
 from spotdl import Spotdl
@@ -12,7 +12,7 @@ from spotdl import Spotdl
 
 
 # method to download song based on song name
-def download_song(song_name, song_dir):
+def download_song(song_name, song_dir, sp):
     #print(song_dir)
     # call search method
 
