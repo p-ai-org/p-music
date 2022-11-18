@@ -6,6 +6,7 @@ from os import path
 from spotipykeys import keys
 import spotipy
 from spotipy.oauth2 import SpotifyOAuth
+import json
 
 
 #first let's specify the directories where we'll be saving our chunks
@@ -124,7 +125,7 @@ def make_album_directories(as_dict, song_dest, spec_dest, sp):
         os.mkdir(clean_album_name)
 
     
-def download_songs(as_dict, song_dest, spec_dest, sp):
+def download_songs(as_dict, song_dest, spec_dest):
     '''
     This function takes an as_dict and downloads the songs into the corresponding folder.
     '''
@@ -146,7 +147,7 @@ def download_songs(as_dict, song_dest, spec_dest, sp):
             song_list = as_dict[album_name]
             #now we loop through the song_lists and download the songs
             for i in tqdm(range(len(song_list)), desc= "downloading " + album_name + " songs...", position=0, leave=True):
-                download_song(song_list[i], song_dest, sp)
+                download_song(song_list[i], song_dest)
         else:
             print("album not found :(")
 
@@ -170,12 +171,16 @@ def main(album_list, song_dest, spec_dest, sp):
     for as_dict in chunk_album_dicts:
         make_album_directories(as_dict, song_dest, spec_dest, sp)
 
-    #now that we've made all the directories we must download each of the songs into the corresponding songs folder
-    for as_dict in chunk_album_dicts:
-        download_songs(as_dict, song_dest, spec_dest, sp)
 
     return chunk_album_dicts
 
 
 chunk_album_dicts = main(album_list, song_dest, spec_dest, sp)
-print(chunk_album_dicts)
+
+#Now we will save the results into a json object.
+json_file = json.dumps(chunk_album_dicts)
+
+with open('data.json', 'w') as f:
+    json.dump(json_file, f)
+
+f.close()

@@ -12,7 +12,7 @@ from spotdl import Spotdl
 
 
 # method to download song based on song name
-def download_song(song_name, song_dir, sp):
+def download_song(song_name, song_dir):
     #print(song_dir)
     # call search method
 
