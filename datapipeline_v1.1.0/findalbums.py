@@ -13,7 +13,11 @@ SPOTIPY_CLIENT_SECRET=keys['spotipy_client_secret']
 
 #sp= spotipy.Spotify(auth_manager=SpotifyOAuth(client_id=SPOTIPY_CLIENT_ID, client_secret=SPOTIPY_CLIENT_SECRET, redirect_uri=SPOTIPY_REDIRECT_URI))
 auth_manager = SpotifyClientCredentials(SPOTIPY_CLIENT_ID, SPOTIPY_CLIENT_SECRET)
+<<<<<<< HEAD
+sp = spotipy.Spotify(auth_manager = auth_manager)
+=======
 sp = spotipy.Spotify(auth_manager=auth_manager)
+>>>>>>> aa5ed6e58ccc405e35310368a64fe78fae45806e
 
 # find album by name
 # get the first album uri

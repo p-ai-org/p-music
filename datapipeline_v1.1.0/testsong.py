@@ -5,7 +5,7 @@ from generatespectrograms import *
 # choose song name
 song_name = "the 59th street bridge song"
 # define song path
-song_path = '/Users/oscarscholin/Desktop/Pomona/Junior_Year/P-ai/test'
+song_path = '/home/oscar47/Desktop/P-ai/test'
 
 # create new directory for song
 t_path = os.path.join(song_path, song_name)
