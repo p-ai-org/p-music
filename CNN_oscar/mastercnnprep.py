@@ -13,20 +13,34 @@ SPEC_DIR = os.path.join(MAIN_DIR, 'spectrograms')
 TRAIN_DIR = os.path.join(MAIN_DIR, 'train_data') # to store out .npy files
 
 # call histogram function-------
-make_hist(SPEC_DIR, MAIN_DIR)
+#make_hist(SPEC_DIR, MAIN_DIR)
 
 # call dataset gen functions-----------
 # note depending on computer strength you may need to rescale the img height and width
-train_x_ds, val_x_ds = build_spec_ds(SPEC_DIR, img_height=512, img_width=1000)
-# save as .npy for later!
-np.save(os.path.join(TRAIN_DIR, 'train_x_ds.npy'), train_x_ds)
-np.save(os.path.join(TRAIN_DIR, 'val_x_ds.npy'), val_x_ds)
-
-# define the merged csv-----------------
-# extract column from merged dataset with album name. np array of with output score as single element in list------------
+# resize image by half
 merged_df = pd.read_csv(os.path.join(MAIN_DIR, 'p-music/merged_features.csv'))
 
-train_y_ds, val_y_ds = build_label_ds(SPEC_DIR, merged_df)
-# save as .npy for later!
-np.save(os.path.join(TRAIN_DIR, 'train_y_ds.npy'), train_x_ds)
-np.save(os.path.join(TRAIN_DIR, 'val_y_ds.npy'), val_x_ds)
+choice = input('do you want to (a) build spec ds or (b) build label ds?')
+condition=True
+while condition==True:
+    if choice=='a':
+        condition=False
+        build_spec_ds(SPEC_DIR, img_height=256, img_width=500)
+        
+    elif choice=='b':
+        condition=False
+        build_label_ds(SPEC_DIR, merged_df)
+    elif choice=='c':
+        condition=False
+        #print(np.zeros((256, 500)))
+        print(os.path.isdir(MAIN_DIR))
+    else:
+        print('try again!')
+
+# display results!
+#if os.path.exists(os.path.join(TRAIN_DIR, 'val_x_ds.npy')):
+    #val_x_ds = np.load(os.path.join(TRAIN_DIR, 'val_x_ds.npy'))
+    #print(val_x_ds)
+if os.path.exists(os.path.join(TRAIN_DIR, 'val_y_ds.npy')):
+    val_y_ds = np.load(os.path.join(TRAIN_DIR, 'val_y_ds.npy'))
+    print(val_y_ds[0])
