@@ -20,27 +20,37 @@ TRAIN_DIR = os.path.join(MAIN_DIR, 'train_data') # to store out .npy files
 # resize image by half
 merged_df = pd.read_csv(os.path.join(MAIN_DIR, 'p-music/merged_features.csv'))
 
-choice = input('do you want to (a) build spec ds or (b) build label ds?')
+choice = input('do you want to (a) build spec ds or (b) build label ds? or (c) combine spec ds part 0 and 1?')
 condition=True
 while condition==True:
     if choice=='a':
         condition=False
-        build_spec_ds(SPEC_DIR, img_height=256, img_width=500)
+        choice2=input('run part 0 or 1 or 2? (first or second half or all)') 
+        build_spec_ds(SPEC_DIR, img_height=50, img_width=100, part=int(choice2))
         
     elif choice=='b':
         condition=False
         build_label_ds(SPEC_DIR, merged_df)
     elif choice=='c':
-        condition=False
-        #print(np.zeros((256, 500)))
-        print(os.path.isdir(MAIN_DIR))
+        train_x_ds_1 = np.load(os.path.join(TRAIN_DIR, 'train_x_ds_1.npy'))
+        val_x_ds_1 = np.load(os.path.join(TRAIN_DIR, 'val_x_ds_1.npy'))
+        extra_x_ds_1 = np.load(os.path.join(TRAIN_DIR, 'extra_x_ds_1.npy'))
+
+        train_x_ds_0 = np.load(os.path.join(TRAIN_DIR, 'train_x_ds_0.npy'))
+        val_x_ds_0 = np.load(os.path.join(TRAIN_DIR, 'val_x_ds_0.npy'))
+        extra_x_ds_0 = np.load(os.path.join(TRAIN_DIR, 'extra_x_ds_0.npy'))
+
+        # now concatenate
+        val_x_ds = np.concatenate(val_x_ds_0, val_x_ds_1)
+        print(val_x_ds.shape)
+        
     else:
         print('try again!')
 
 # display results!
-#if os.path.exists(os.path.join(TRAIN_DIR, 'val_x_ds.npy')):
-    #val_x_ds = np.load(os.path.join(TRAIN_DIR, 'val_x_ds.npy'))
-    #print(val_x_ds)
-if os.path.exists(os.path.join(TRAIN_DIR, 'val_y_ds.npy')):
-    val_y_ds = np.load(os.path.join(TRAIN_DIR, 'val_y_ds.npy'))
-    print(val_y_ds[0])
+# if os.path.exists(os.path.join(TRAIN_DIR, 'val_x_ds.npy')):
+#     val_x_ds = np.load(os.path.join(TRAIN_DIR, 'val_x_ds.npy'))
+#     print(val_x_ds[0].shape)
+# if os.path.exists(os.path.join(TRAIN_DIR, 'val_y_ds.npy')):
+#     val_y_ds = np.load(os.path.join(TRAIN_DIR, 'val_y_ds.npy'))
+#     print(val_y_ds[0].shape)

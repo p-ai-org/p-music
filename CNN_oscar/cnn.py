@@ -17,39 +17,36 @@ MAIN_DIR = '/home/oscar47/Desktop/P-ai'
 TRAIN_DIR = os.path.join(MAIN_DIR, 'train_data') # to store out .npy files
 
 # get np arrays for training!------
-train_x_ds = np.load(os.path.join(TRAIN_DIR, 'train_x_ds.npy')) 
-val_x_ds = np.load(os.path.join(TRAIN_DIR, 'val_x_ds.npy')) 
+train_x_ds = np.load(os.path.join(TRAIN_DIR, 'train_x_ds_2.npy')) 
+val_x_ds = np.load(os.path.join(TRAIN_DIR, 'val_x_ds_2.npy')) 
 train_y_ds = np.load(os.path.join(TRAIN_DIR, 'train_y_ds.npy')) 
 val_y_ds = np.load(os.path.join(TRAIN_DIR, 'val_y_ds.npy'))
 
 # define shape of incoming and outgoing factors
 input_shape = train_x_ds[0].shape
-output_shape = len(train_y_ds[0])
-#print(input_shape, output_shape)
+output_shape = train_y_ds[0].shape
+print(input_shape, output_shape)
+
+print(val_x_ds.shape)
+print(val_y_ds.shape)
 
 # define cnn---------------
-def build_model(input_shape, output_len, size1, size2, size3, size4, size5, dense1, learning_rate):
+def build_model(input_shape, size1, size2, size3, dense1, learning_rate):
     model = Sequential() # initialize Sequential model object so we can add layers sequentially
-    model.add(layers.InputLayer(input_shape)) # add the shape of our input x training vectors
+    #model.add(layers.InputLayer(input_shape)) # add the shape of our input x training vectors
     # add a sequence of 5 convolutional layers, alternating Conv2D and MaxPooling
-    model.add(layers.Conv2D(size1, (3, 3), activation='relu', padding='same')) # the (3,3) is size of the kernel -- this is a hyperparam we can use wanb to investigate as well
-    model.add(layers.MaxPool2D((2,2), padding='same'))
+    model.add(layers.Conv2D(size1, (3, 3), activation='relu', input_shape = input_shape)) # the (3,3) is size of the kernel -- this is a hyperparam we can use wanb to investigate as well
+    model.add(layers.MaxPool2D((2,2)))
 
-    model.add(layers.Conv2D(size2, (3, 3), activation='relu', padding='same'))
-    model.add(layers.MaxPool2D((2,2), padding='same'))
+    model.add(layers.Conv2D(size2, (3, 3), activation='relu'))
+    model.add(layers.MaxPool2D((2,2)))
 
-    model.add(layers.Conv2D(size3, (3, 3), activation='relu', padding='same'))
-    model.add(layers.MaxPool2D((2,2), padding='same'))
-
-    model.add(layers.Conv2D(size4, (3, 3), activation='relu', padding='same'))
-    model.add(layers.MaxPool2D((2,2), padding='same'))
-
-    model.add(layers.Conv2D(size5, (3, 3), activation='relu', padding='same'))
-    model.add(layers.MaxPool2D((2,2), padding='same'))
+    model.add(layers.Conv2D(size3, (3, 3), activation='relu'))
+    model.add(layers.MaxPool2D((2,2)))
 
     model.add(layers.Flatten()) # convert array to vector
     model.add(layers.Dense(dense1, activation='relu')) # add a final dense layer
-    model.add(layers.Dense(output_len)) # match output size: which should just be size 1 (a single number)
+    model.add(layers.Dense(1)) # match output size: which should just be size 1 (a single number)
 
     optimizer = Adam(learning_rate = learning_rate) # compile the model!
     model.compile(optimizer=optimizer, loss='mse')
@@ -67,8 +64,7 @@ def train(config=None):
 
       #initialize the neural net; 
       global model
-      model = build_model(input_shape, output_shape, config.size_1,  config.size_2, config.size_3, 
-              config.size_4, config.size_5, 
+      model = build_model(input_shape, config.size_1,  config.size_2, config.size_3,  
               config.dense1, config.learning_rate)
       
       #now run training
@@ -79,6 +75,19 @@ def train(config=None):
         epochs=config.epochs,
         callbacks=[WandbCallback()] #use callbacks to have w&b log stats; will automatically save best model                     
       )
+
+def train_custom():
+   global model
+   model = build_model(input_shape, 32,  32, 32, 32, 0.01)
+      
+   #now run training
+   history = model.fit(
+      train_x_ds, train_y_ds,
+      batch_size = 32,
+      validation_data=(val_x_ds, val_y_ds),
+      epochs=3,
+      #callbacks=[WandbCallback()] #use callbacks to have w&b log stats; will automatically save best model                     
+   )
 
 # set dictionary with random search; optimizing val_loss--------------------------
 sweep_config= {
@@ -111,14 +120,6 @@ parameters_dict = {
        'distribution': 'int_uniform',
        'min': 64,
        'max': 256
-    },'size_4': {
-       'distribution': 'int_uniform',
-       'min': 64,
-       'max': 256
-    },'size_5': {
-       'distribution': 'int_uniform',
-       'min': 64,
-       'max': 256
     },
     'dense1': {
        'distribution': 'int_uniform',
@@ -136,6 +137,7 @@ parameters_dict = {
 # append parameters to sweep config
 sweep_config['parameters'] = parameters_dict 
 
+#train_custom()
 
 # login to wandb----------------
 wandb.init(project="Oscar CNN1", entity="p-ai")
