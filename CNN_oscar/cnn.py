@@ -4,6 +4,7 @@
 
 import os
 import numpy as np
+import keras
 from keras import layers
 from keras.models import Model, Sequential, load_model
 from keras.optimizers import Adam
@@ -49,7 +50,7 @@ def build_model(input_shape, size1, size2, size3, dense1, learning_rate):
     model.add(layers.Dense(1)) # match output size: which should just be size 1 (a single number)
 
     optimizer = Adam(learning_rate = learning_rate) # compile the model!
-    model.compile(optimizer=optimizer, loss='mse')
+    model.compile(optimizer=optimizer, loss=keras.losses.CategoricalCrossentropy)
 
     return model
 
@@ -100,8 +101,8 @@ sweep_config['metric']= 'val_accuracy'
 parameters_dict = {
     'epochs': {
        'distribution': 'int_uniform',
-       'min': 20,
-       'max': 100
+       'min': 15,
+       'max': 30
     },
     # for build_dataset
      'batch_size': {
@@ -138,6 +139,7 @@ parameters_dict = {
 sweep_config['parameters'] = parameters_dict 
 
 #train_custom()
+
 
 # login to wandb----------------
 wandb.init(project="Oscar CNN1", entity="p-ai")
