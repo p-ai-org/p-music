@@ -20,7 +20,7 @@ TRAIN_DIR = os.path.join(MAIN_DIR, 'train_data') # to store out .npy files
 # resize image by half
 merged_df = pd.read_csv(os.path.join(MAIN_DIR, 'p-music/merged_features.csv'))
 
-choice = input('do you want to (a) build spec ds or (b) build label ds? or (c) combine spec ds part 0 and 1?')
+choice = input('do you want to (a) build spec ds or (b) build label ds?')
 condition=True
 while condition==True:
     if choice=='a':
@@ -31,19 +31,6 @@ while condition==True:
     elif choice=='b':
         condition=False
         build_label_ds(SPEC_DIR, merged_df)
-    elif choice=='c':
-        train_x_ds_1 = np.load(os.path.join(TRAIN_DIR, 'train_x_ds_1.npy'))
-        val_x_ds_1 = np.load(os.path.join(TRAIN_DIR, 'val_x_ds_1.npy'))
-        extra_x_ds_1 = np.load(os.path.join(TRAIN_DIR, 'extra_x_ds_1.npy'))
-
-        train_x_ds_0 = np.load(os.path.join(TRAIN_DIR, 'train_x_ds_0.npy'))
-        val_x_ds_0 = np.load(os.path.join(TRAIN_DIR, 'val_x_ds_0.npy'))
-        extra_x_ds_0 = np.load(os.path.join(TRAIN_DIR, 'extra_x_ds_0.npy'))
-
-        # now concatenate
-        val_x_ds = np.concatenate(val_x_ds_0, val_x_ds_1)
-        print(val_x_ds.shape)
-        
     else:
         print('try again!')
 
