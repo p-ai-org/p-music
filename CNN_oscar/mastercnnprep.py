@@ -7,8 +7,10 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from cnnhelperprep import *
 
+#test
+print("test")
 # define directories---------
-MAIN_DIR = '/home/oscar47/Desktop/P-ai'
+MAIN_DIR = '/home/seohyeon-lee/p-music/CNN_oscar/mastercnnprep.py'
 SPEC_DIR = os.path.join(MAIN_DIR, 'spectrograms')
 TRAIN_DIR = os.path.join(MAIN_DIR, 'train_data') # to store out .npy files
 
