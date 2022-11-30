@@ -194,9 +194,10 @@ def find_classes(total_scores, num_classes):
     scores_sorted = sorted(total_scores)
     # print(total_scores)
     # print(scores_sorted)
-    for i in range(num_classes-1):
+    for i in range(num_classes): # need this to not have -1
         scores_clipped = scores_sorted[i*num_in_class: (i+1)*num_in_class+1] # want in this range of indices
         class_tuples.append((scores_clipped[0], scores_clipped[-1]))
+        print('num objects in class', len(scores_clipped))
     return class_tuples # save as tuples so we can know what scores
 
 
