@@ -65,7 +65,7 @@ def build_spec_ds(album_path, img_height, img_width, part): # parts tells us to 
             # plt.imshow(super_spectrogram)
             # plt.show()
             # print(super_spectrogram.shape)
-            
+
             all_albums_spec_ls.append(super_spectrogram)
         # all_albums_spec_ls.append(np.array(albums_spec_ls))
     #first split 85-15
@@ -138,7 +138,6 @@ def build_label_ds(album_path, ds):
             # star = find_star(weighted_mean)
             # vec[star]=1 # all 0s except for 1 1 @ index corresponding to score
             #total_scores.append(vec)
-            total_scores_values.append(weighted_mean)
     
     num_classes = 4 # number of stars we want
     global stars # make it global so we can access it later
@@ -150,10 +149,10 @@ def build_label_ds(album_path, ds):
         # initialize 1 hot vector
         vec = np.zeros(num_classes)
         for i, star in enumerate(stars):
-            if (score >= star[0]) and (score <= star[1]): # if we're within target range
+            if (score >= star[0]) and (score < star[1]): # if we're within target range
                 vec[i]=1
         # append np.array
-        total_scores.append(np.array(vec))        
+        total_scores.append(np.array(vec))     
     
     #first split 85-15
     init_split_index = int(.85*len(total_scores))
@@ -172,7 +171,7 @@ def build_label_ds(album_path, ds):
     val_y_ds = np.array(val_y_list)
     extra_y_ds = np.array(extra_scores)
 
-    print(val_y_ds.shape)
+    print(train_y_ds.shape)
 
     # add extra albums to dataframe to save
     extra_albums_df = pd.DataFrame()
