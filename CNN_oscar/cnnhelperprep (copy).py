@@ -11,6 +11,10 @@ MAIN_DIR = '/home/oscar47/Desktop/P-ai'
 TRAIN_DIR = os.path.join(MAIN_DIR, 'train_data') # to store out .npy files
 SPEC_DIR = os.path.join(MAIN_DIR, 'spectrograms')
 
+ # define classes of stars for ratings (0-10); the score is the index of the 1 in the 1-hot vector
+global stars
+stars = np.arange(11, dtype=int)
+
 # get spec dataset
 def build_spec_ds(album_path, img_height, img_width, part): # parts tells us to run first or second half
     albums = os.listdir(album_path)
@@ -57,15 +61,13 @@ def build_spec_ds(album_path, img_height, img_width, part): # parts tells us to 
                 
                      
             # concatenate the spectrograms horizontally!
-            #print(albums_spec_ls)
+            print(albums_spec_ls)
             super_spectrogram = np.concatenate(albums_spec_ls, axis=1)
-
             #visualize
             # plt.figure(figsize=(10,3))
             # plt.imshow(super_spectrogram)
             # plt.show()
-            # print(super_spectrogram.shape)
-            
+            #print(super_spectrogram.shape)
             all_albums_spec_ls.append(super_spectrogram)
         # all_albums_spec_ls.append(np.array(albums_spec_ls))
     #first split 85-15
@@ -100,7 +102,31 @@ def build_spec_ds(album_path, img_height, img_width, part): # parts tells us to 
     np.save(os.path.join(TRAIN_DIR, 'val_x_ds_'+ str(part)+'.npy'), val_x_ds)
     np.save(os.path.join(TRAIN_DIR, 'extra_x_ds_'+str(part)+'.npy'), extra_x_ds)
 
-
+def find_star(score):
+    if (score >=0) and (score < 0.05):
+        return 0
+    elif (score >=0.05) and (score < 0.15):
+        return 1
+    elif (score >=0.15) and (score < 0.25):
+        return 2
+    elif (score >=0.25) and (score < 0.35):
+        return 3
+    elif (score >=0.35) and (score < 0.45):
+        return 4
+    elif (score >=0.45) and (score < 0.55):
+        return 5
+    elif (score >=0.55) and (score < 0.65):
+        return 6
+    elif (score >=0.65) and (score < 0.75):
+        return 7
+    elif (score >=0.75) and (score < 0.85):
+        return 8
+    elif (score >=0.85) and (score < 0.95):
+        return 9
+    elif (score >=0.95) and (score <= 1):
+        return 10
+    
+    
 
 # takes in ds
 def build_label_ds(album_path, ds):
@@ -132,28 +158,12 @@ def build_label_ds(album_path, ds):
             weighted_mean = ((aotycr / num_reviews)*aotycs + (aotyur / num_reviews) * aotyus) / 100
             total_scores_values.append(weighted_mean)
          
-            # # convert to np.array
-            # vec = np.zeros(11)
-            # # find class of score
-            # star = find_star(weighted_mean)
-            # vec[star]=1 # all 0s except for 1 1 @ index corresponding to score
-            #total_scores.append(vec)
-            total_scores_values.append(weighted_mean)
-    
-    num_classes = 4 # number of stars we want
-    global stars # make it global so we can access it later
-    stars = find_classes(total_scores_values, num_classes)
-    print('stars:', stars)
-
-    # use this list of tuples to define find star function to then get 1-hot vectors
-    for score in total_scores_values:
-        # initialize 1 hot vector
-        vec = np.zeros(num_classes)
-        for i, star in enumerate(stars):
-            if (score >= star[0]) and (score <= star[1]): # if we're within target range
-                vec[i]=1
-        # append np.array
-        total_scores.append(np.array(vec))        
+            # convert to np.array
+            vec = np.zeros(11)
+            # find class of score
+            star = find_star(weighted_mean)
+            vec[star]=1 # all 0s except for 1 1 @ index corresponding to score
+            total_scores.append(np.array(vec))
     
     #first split 85-15
     init_split_index = int(.85*len(total_scores))
@@ -185,21 +195,8 @@ def build_label_ds(album_path, ds):
     np.save(os.path.join(TRAIN_DIR, 'extra_y_ds.npy'), extra_y_ds)
     extra_albums_df.to_csv(os.path.join(TRAIN_DIR, 'extra_albums.csv'))
 
-    # # make histogram
-    # make_hist_scores(total_scores_values, train_scores_values, MAIN_DIR)
-
-# extra function to find the distribution of songs for labeling-----
-def find_classes(total_scores, num_classes):
-    num_in_class = int(len(total_scores) / num_classes)
-    class_tuples = []
-    scores_sorted = sorted(total_scores)
-    # print(total_scores)
-    # print(scores_sorted)
-    for i in range(num_classes-1):
-        scores_clipped = scores_sorted[i*num_in_class: (i+1)*num_in_class+1] # want in this range of indices
-        class_tuples.append((scores_clipped[0], scores_clipped[-1]))
-    return class_tuples # save as tuples so we can know what scores
-
+    # make histogram
+    make_hist_scores(total_scores_values, train_scores_values, MAIN_DIR)
 
 # extra data visualization functions
 # functions to make histogram--------------
