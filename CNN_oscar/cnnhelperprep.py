@@ -26,47 +26,76 @@ def build_spec_ds(album_path, img_height, img_width, part): # parts tells us to 
         album = albums[i]
         if (os.path.isdir(os.path.join(album_path, album))) and (len(os.listdir(os.path.join(album_path, album))) >= 1): # if it's a valid directory
             songs = os.listdir(os.path.join(album_path, album))
-            albums_spec_ls = [] # list to hold song np.arrays for a given album
-            for j in tqdm(range(len(songs)), desc='inner song loop p.1...', position=1, leave=False):
-                song = songs[j]
-                if j >= 11:
-                    break
 
-                if (song.endswith('.png')) or (song.endswith('jpeg')): # confirm we're loading images
-                    img = cv2.imread(os.path.join(album_path, album, song))
-                    #img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY
-                    #img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY) 
-                    img = cv2.resize(img, (img_width, img_height))
+            # get random song
+            song_index = int(len(songs)*np.random.random())
+            song = songs[song_index]
+
+            if (song.endswith('.png')) or (song.endswith('jpeg')): # confirm we're loading images
+                img = cv2.imread(os.path.join(album_path, album, song))
+                #img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY
+                #img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY) 
+                img = cv2.resize(img, (img_width, img_height))
+
+                
+                # print(np.array(img).shape)
+                # print(np.array(img))
+                all_albums_spec_ls.append(np.array(img))
+                # visualize
+                # plt.figure(figsize=(10,3))
+                # plt.imshow(img)
+                # plt.show()
+                # print(img.shape)
+        
+
+
+
+            # superspec cut
+
+            # for j in tqdm(range(len(songs)), desc='inner song loop p.1...', position=1, leave=False):
+            #     song = songs[j]
+            #     if j >= 11:
+            #         break
+
+            #     if (song.endswith('.png')) or (song.endswith('jpeg')): # confirm we're loading images
+            #         img = cv2.imread(os.path.join(album_path, album, song))
+            #         #img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY
+            #         #img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY) 
+            #         img = cv2.resize(img, (img_width, img_height))
 
                     
-                    # print(np.array(img).shape)
-                    # print(np.array(img))
-                    albums_spec_ls.append(np.array(img))
+            #         # print(np.array(img).shape)
+            #         # print(np.array(img))
+            #         albums_spec_ls.append(np.array(img))
 
-                    # NEED TO CHECK WE HAVENT EXCEEDED NUMBER OF ALLOWED SPECTROGRAMS
-                    # use histogram to determine median number; append arrays of 0s for those that don't have enough
+            #         # NEED TO CHECK WE HAVENT EXCEEDED NUMBER OF ALLOWED SPECTROGRAMS
+            #         # use histogram to determine median number; append arrays of 0s for those that don't have enough
 
-                    #print(albums_spec_ls)
+            #         #print(albums_spec_ls)
                 
-                if (len(songs) < 11) and (j==len(songs)-1): # if on last index and has below 11 songs
-                    for k in tqdm(range(11-len(songs)), desc='padding deficient album...', position=1, leave=False):
-                        #print(img_height)
-                        albums_spec_ls.append(np.zeros(img.shape, dtype='uint8')) # 3 for 3 colors
-                        #print(albums_spec_ls)
-                        #print(np.zeros((img_height, img_width, 3), dtype='float32').shape)
+            #     if (len(songs) < 11) and (j==len(songs)-1): # if on last index and has below 11 songs
+            #         for k in tqdm(range(11-len(songs)), desc='padding deficient album...', position=1, leave=False):
+            #             #print(img_height)
+            #             albums_spec_ls.append(np.zeros(img.shape, dtype='uint8')) # 3 for 3 colors
+            #             #print(albums_spec_ls)
+            #             #print(np.zeros((img_height, img_width, 3), dtype='float32').shape)
                 
                      
-            # concatenate the spectrograms horizontally!
-            #print(albums_spec_ls)
-            super_spectrogram = np.concatenate(albums_spec_ls, axis=1)
+            # # concatenate the spectrograms horizontally!
+            # #print(albums_spec_ls)
+            # super_spectrogram = np.concatenate(albums_spec_ls, axis=1)
 
-            #visualize
-            # plt.figure(figsize=(10,3))
-            # plt.imshow(super_spectrogram)
-            # plt.show()
-            # print(super_spectrogram.shape)
+            # #visualize
+            # # plt.figure(figsize=(10,3))
+            # # plt.imshow(super_spectrogram)
+            # # plt.show()
+            # # print(super_spectrogram.shape)
 
-            all_albums_spec_ls.append(super_spectrogram)
+            # all_albums_spec_ls.append(super_spectrogram)
+
+            # end cut---------------------------------------
+
+
         # all_albums_spec_ls.append(np.array(albums_spec_ls))
     #first split 85-15
     init_split_index = int(.85*len(all_albums_spec_ls))
