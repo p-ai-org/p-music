@@ -177,10 +177,13 @@ def main(album_list, song_dest, spec_dest, sp):
 
 chunk_album_dicts = main(album_list, song_dest, spec_dest, sp)
 
-#Now we will save the results into a json object.
-json_file = json.dumps(chunk_album_dicts)
 
-with open('data.json', 'w') as f:
-    json.dump(json_file, f)
+#now let's make a file and dump this into it
+data_str = json.dumps(chunk_album_dicts)
+print(data_str)
+print(type(data_str))
 
-f.close()
+#now let's create a folder to dump everything into...
+jsonFile = open("data.json", "w")
+jsonFile.write(data_str)
+jsonFile.close()
