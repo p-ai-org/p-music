@@ -16,7 +16,7 @@ TRAIN_DIR = os.path.join(MAIN_DIR, 'train_data')
 OUT_DIR = os.path.join(MAIN_DIR, 'out_data')
 
 # load in model!-------------
-model = load_model(os.path.join(MODEL_PATH, 'trim13.h5'))
+model = load_model(os.path.join(MODEL_PATH, 'sunny9.h5'))
 
 
 # load the x and y extra data----
@@ -29,7 +29,7 @@ train_y_ds = np.load(os.path.join(TRAIN_DIR, 'train_y_ds.npy'))
 
 # function to manage predictions. takes in model------------
 # model is model file, input is x data, targets is y data, albums is albums names, outpath is where to store df; savename is what to call file
-def model_predict(model, input, targets, outpath):
+def model_predict(model, input, targets, savename, outpath):
     predictions = model.predict(input) # this will be an np array of 1 element arrays containing the scores; need to convert to list
     # print(predictions)
     # print(targets)
@@ -56,7 +56,7 @@ def model_predict(model, input, targets, outpath):
 def get_confusion_matrix(output_targets, output_preds):
     # create a confusion matrix to illustrate results
     cm = confusion_matrix(output_targets, output_preds)
-    cm_df = pd.DataFrame(cm, index = list(range(6, 11, 1)), columns = list(range(6, 11, 1)))
+    cm_df = pd.DataFrame(cm, index = list(range(4)), columns = list(range(4)))
     # compute accuracy
     accuracy = 0
     for i in range(len(cm)):
@@ -68,22 +68,21 @@ def get_confusion_matrix(output_targets, output_preds):
     # plot
     plt.figure(figsize=(10,7))
     sns.heatmap(cm_norm_df, cmap = 'viridis', annot=True)
-    plt.title('trim13 - train, accuracy = %f'%np.round(accuracy, 4), fontsize=20)
-    plt.ylabel('Actual variable class', fontsize=16)
-    plt.xlabel('Predicted variable class', fontsize=16)
+    plt.title('sunny9 - extra, accuracy = %f'%np.round(accuracy, 4), fontsize=20)
+    plt.ylabel('Actual class', fontsize=16)
+    plt.xlabel('Predicted class', fontsize=16)
     #plt.savefig(os.path.join(DATA_DIR, 'confusion_acc_v0.0.1.jpeg'))
     plt.show()
 
 # album names (last 15%)-----------
 # albums_df = pd.read_csv(os.path.join(TRAIN_DIR, 'extra_albums.csv'))
 # albums = albums_df['album'].to_list()
-# savename = 'silver4_results.csv'
-
-model_predict(model, train_x_ds, train_y_ds, OUT_DIR)
-
+savename = 'eager7_results.csv'
+model_predict(model, train_x_ds, train_y_ds, savename, OUT_DIR)
 
 
 
-savename='train_results.csv'
+
+savename='ruby8_results.csv'
 #print(train_y_ds)
 #model_predict(model, train_x_ds, train_y_ds, OUT_DIR, savename)

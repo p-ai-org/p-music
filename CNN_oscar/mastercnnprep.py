@@ -28,7 +28,7 @@ while condition==True:
     if choice=='a':
         condition=False
         choice2=input('run part 0 or 1 or 2? (first or second half or all)') 
-        build_spec_ds(SPEC_DIR, img_height=50, img_width=100, part=int(choice2))
+        build_spec_ds(SPEC_DIR, img_height=250, img_width=500, part=int(choice2))
         
     elif choice=='b':
         condition=False
