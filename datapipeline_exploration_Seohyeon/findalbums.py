@@ -1,5 +1,5 @@
 #create folders for each albums
-# @lapcbws
+# @seohyeon-lee-2025
 #use spotdl in command line to download all the songs in an album
 #import modules
 import pandas as pd
